@@ -5,28 +5,39 @@ import numpy as np
 import pprint
 import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
+import time
+import random
 
 # Add project root to path if running from a subfolder
-sys.path.append(".") 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from CogPilot.dataset import CogPilotDataset
 
 CONFIG = {
     "index_json": "data/processed/dataset_index.json",
     "signal_length": 512,
-    "target_fs": 128.0
+    "target_fs": 128.0,
+    "cache_runs": True, 
+    "preload_all": True
 }
 
+def decode_label(label_index):
+    """Helper to decode the new 0-7 label back to human readable text."""
+    # Formula: label = (is_expert * 4) + (difficulty - 1)
+    is_expert = label_index // 4
+    difficulty = (label_index % 4) + 1
+    
+    expert_str = "Expert" if is_expert else "Novice"
+    return f"{expert_str} - Level {difficulty}"
+
 # -----------------------------
-# Verify Split Logic
+# Initialize & Verify Split Logic
 # -----------------------------
 
 print("\n===== VERIFYING SPLITS =====")
-
 # Initialize both datasets
 print("Loading Training Set...")
 train_ds = CogPilotDataset(split="train", **CONFIG)
-
 print("\nLoading Testing Set...")
 test_ds = CogPilotDataset(split="test", **CONFIG)
 
@@ -36,12 +47,14 @@ train_ids = set([f"{r['subject']}_{r['run_id']}" for r in train_ds.run_index])
 test_ids  = set([f"{r['subject']}_{r['run_id']}" for r in test_ds.run_index])
 
 n_total = len(train_ids) + len(test_ids)
-print(f"Train Unique Recordings: {len(train_ids)}")
-print(f"Test Unique Recordings:  {len(test_ids)}")
-print(f"Total Recordings:        {n_total}")
-print(f"Split Ratio:             {len(train_ids)/n_total:.1%} / {len(test_ids)/n_total:.1%}")
+print(f"Train Windows: {len(train_ds)}")
+print(f"Test Windows: {len(test_ds)}")
+print(f"Train Runs: {len(train_ids)}")
+print(f"Test Runs:  {len(test_ids)}")
+print(f"Total Runs:        {n_total}")
+print(f"Avg Windows/Run (train): {len(train_ids)/n_total:.1%} / {len(test_ids)/n_total:.1%}")
 
-# 5. Check Overlap
+# Check for no overlap in runs
 intersection = train_ids.intersection(test_ids)
 
 if len(intersection) == 0:
@@ -49,7 +62,6 @@ if len(intersection) == 0:
 else:
     print(f"\n❌ CRITICAL ERROR: Found {len(intersection)} recordings in BOTH sets!")
     print(f"Overlapping: {list(intersection)}...")
-    
     
 train_subjs = set([x.split('_')[0] for x in train_ids])
 test_subjs = set([x.split('_')[0] for x in test_ids])
@@ -82,10 +94,11 @@ else:
 
 
 # -----------------------------
-# Test __getitem__
+# Test __getitem__ & label logic
 # -----------------------------
 print("\n===== GETITEM TEST =====")
-sample = train_ds[0]  # Returns a dictionary now
+sample_index = 32241
+sample = train_ds[sample_index] # grab a random sample
 
 # Extract components
 signal = sample["signal"]
@@ -93,20 +106,58 @@ cond = sample["cond"]
 label = sample["label"]
 
 print(f"Signal shape: {signal.shape}") # Expect: [14, 512]
-print(f"Cond shape:   {cond.shape}")   # Expect: [1, 512]
-print(f"Label:        {label.item()}") # Expect: 0.0 or 1.0
+#print(f"Cond shape:   {cond.shape}")   # Expect: [1, 512] <- old, 
+print(f"Label:        {label.item()}") # Expect: (0-7)
+print(f"Decoded:      {decode_label(label.item())}")
+
+# Verify tensor shapes
+if signal.shape == (14, 512):
+    print("SUCCESS: Signal shape is correct for AdaConv (Channels, Time).")
+else:
+    print(f"ERROR: Signal shape mismatch! Got {signal.shape}")
+
+if label.dim() == 0:
+    print("SUCCESS: Label is a scalar (correct for nn.Embedding).")
+else:
+    print(f"ERROR: Label should be scalar, got shape {label.shape}")
 
 # -----------------------------
-# Test DataLoader
+# Test Cache
 # -----------------------------
-""" print("\n===== DATALOADER TEST =====")
-loader = DataLoader(train_ds, batch_size=4, shuffle=True)
+print("\n===== CACHING PERFORMANCE TEST =====")
+# Access a sample from a new run (uncached)
+start = time.time()
+_ = train_ds 
+print(f"First access (Load + Synch): {time.time() - start:.5f}s")
+
+# Access it again (should be faster)
+start = time.time()
+_ = train_ds
+print(f"Second access (Cached): {time.time() - start:.5f}s")
+
+# -----------------------------
+# Test DataLoader Batch
+# -----------------------------
+print("\n===== DATALOADER TEST =====")
+loader = DataLoader(train_ds, batch_size=32, shuffle=True)
 
 batch = next(iter(loader))
 
-print(f"Batch keys: {batch.keys()}")             # Expect: ['signal', 'cond', 'label']
-print(f"Batch Signal shape: {batch['signal'].shape}") # Expect: [4, 14, 512]
-print(f"Batch Cond shape:   {batch['cond'].shape}")   # Expect: [4, 1, 512] """
+print(f"Signal shape: {batch['signal'].shape}")  # Should be (32, 14, 512)
+print(f"Cond shape:   {batch['cond'].shape}")    # Should be (32, 1)
+print(f"Label shape:  {batch['label'].shape}")   # Should be (32,)
+
+print("\nCond values (first 5):", batch['cond'][:5].squeeze().tolist())
+print("Label values (first 5):", batch['label'][:5].tolist())
+
+""" # Verify they match
+assert torch.allclose(batch['cond'].squeeze(), batch['label'].float()), "Cond and label should match!"
+print("✅ Cond and label values match!") """
+
+print(f"Batch Label Shape: {batch['label'].shape}")      # Expect: ['signal', 'cond', 'label']
+print("Sample Labels in Batch:", batch['label'].tolist())
+for lbl in batch['label'].tolist():
+    print(f"  - {decode_label(lbl)}")
 
 # -----------------------------
 #  Plot a raw window

@@ -13,6 +13,7 @@ from torch import optim
 from torch.optim.lr_scheduler import MultiStepLR
 from torch.utils.data import DataLoader, Subset, random_split
 import torch.profiler as profiler
+from torch.utils.data import Subset
 
 from CogPilot.dataset import CogPilotDataset
 
@@ -45,6 +46,69 @@ from ntd.utils.kernels_and_diffusion_utils import (
 from ntd.utils.utils import config_saver, count_parameters
 
 log = logging.getLogger(__name__)
+
+
+def create_stratified_subset(dataset, target_size, seed=42):
+    """
+    Create a stratified subset that samples evenly from all runs.
+    
+    Args:
+        dataset: CogPilotDataset instance
+        target_size: Desired number of samples (e.g., 10000)
+        seed: Random seed for reproducibility
+        
+    Returns:
+        Subset with stratified sampling
+    """
+    np.random.seed(seed)
+    
+    # Get run indices for each sample
+    # dataset.samples is a list of dicts with 'run_idx'
+    run_indices = np.array([sample['run_idx'] for sample in dataset.samples])
+    unique_runs = np.unique(run_indices)
+    
+    print(f"Total samples: {len(dataset)}")
+    print(f"Total unique runs: {len(unique_runs)}")
+    print(f"Target subset size: {target_size}")
+    
+    # Calculate samples per run
+    samples_per_run = target_size // len(unique_runs)
+    remainder = target_size % len(unique_runs)
+    
+    print(f"Sampling ~{samples_per_run} windows per run")
+    
+    selected_indices = []
+    
+    for i, run_idx in enumerate(unique_runs):
+        # Get all indices for this run
+        run_samples = np.where(run_indices == run_idx)[0]
+        
+        # How many to sample from this run
+        n_from_run = samples_per_run + (1 if i < remainder else 0)
+        n_from_run = min(n_from_run, len(run_samples))  # Don't exceed available
+        
+        # Randomly sample from this run
+        sampled = np.random.choice(run_samples, size=n_from_run, replace=False)
+        selected_indices.extend(sampled)
+    
+    selected_indices = np.array(selected_indices)
+    np.random.shuffle(selected_indices)  # Shuffle to mix runs
+    
+    print(f"Selected {len(selected_indices)} samples from {len(unique_runs)} runs")
+    
+    # Verify coverage
+    selected_run_indices = run_indices[selected_indices]
+    unique_selected_runs = np.unique(selected_run_indices)
+    print(f"Coverage: {len(unique_selected_runs)}/{len(unique_runs)} runs ({len(unique_selected_runs)/len(unique_runs)*100:.1f}%)")
+    
+    # Check class balance
+    labels = np.array([dataset.samples[i]['label'] for i in selected_indices])
+    unique_labels, counts = np.unique(labels, return_counts=True)
+    print(f"\nClass distribution in subset:")
+    for label, count in zip(unique_labels, counts):
+        print(f"  Class {label}: {count} samples ({count/len(selected_indices)*100:.1f}%)")
+    
+    return Subset(dataset, selected_indices.tolist())
 
 
 def set_seed(seed: int):
@@ -236,14 +300,18 @@ def init_dataset(cfg):
             index_json=cfg.dataset.index_json,
             signal_length=cfg.dataset.signal_length,
             target_fs=cfg.dataset.target_fs,
-            split='train'
+            split='train',
+            cache_runs=True, 
+            preload_all=True
         )
         
         test_data_set = CogPilotDataset(
             index_json=cfg.dataset.index_json,
             signal_length=cfg.dataset.signal_length,
             target_fs=cfg.dataset.target_fs,
-            split='test'
+            split='test',
+            cache_runs=True, 
+            preload_all=True
         )
         created_train_test_split = True
         
@@ -557,7 +625,7 @@ def training_and_eval_pipeline(cfg):
 
     if cfg.base.use_cuda_if_available and torch.cuda.is_available():
         device = torch.device("cuda")
-        environ_kwargs = {"num_workers": 4, "pin_memory": True}
+        environ_kwargs = {"num_workers": 0, "pin_memory": True}
         log.info("Using CUDA")
     else:
         device = torch.device("cpu")
@@ -568,10 +636,36 @@ def training_and_eval_pipeline(cfg):
     
     if "debug" in str(cfg.base.experiment):
         log.info("!!! DEBUG MODE DETECTED: TRUNCATING DATASET !!!")
-        # Use only 10,000 samples for training and 2,000 for testing
-        train_data_set = torch.utils.data.Subset(train_data_set, range(10000))
-        test_data_set = torch.utils.data.Subset(test_data_set, range(2000))
-        log.info(f"New dataset sizes -> Train: {len(train_data_set)}, Test: {len(test_data_set)}")
+        
+        # Option 1: Sample evenly from all runs (maintains run diversity)
+        train_data_set = create_stratified_subset(
+            train_data_set, 
+            target_size=10000,
+            seed=42
+        )
+        test_data_set = create_stratified_subset(
+            test_data_set,
+            target_size=2000, 
+            seed=42
+        )
+        
+        # Option 2: Sample evenly from all classes (maintains class balance)
+        # train_data_set = create_stratified_subset_by_label(
+        #     train_data_set,
+        #     target_size=10000,
+        #     seed=42
+        # )
+        # test_data_set = create_stratified_subset_by_label(
+        #     test_data_set,
+        #     target_size=2000,
+        #     seed=42
+        # )
+        
+        
+        """ # Use only 10,000 samples for training and 2,000 for testing
+        train_data_set = torch.utils.data.Subset(train_data_set, range(5000))
+        test_data_set = torch.utils.data.Subset(test_data_set, range(1000))
+        log.info(f"New dataset sizes -> Train: {len(train_data_set)}, Test: {len(test_data_set)}") """
 
     train_loader = DataLoader(
         train_data_set,

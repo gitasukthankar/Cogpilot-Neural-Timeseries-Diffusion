@@ -168,4 +168,12 @@ node_modules
 test_data
 dataPackage
 generated_data_root
+generated_data_root_take1
+generated_data_root_take2
+generated_data_root
 pilotAnalysis.ipynb
+/slurm_outputs
+diagnostic_denormalization.png
+generated_dataset.json
+generatedDataAnalysis.ipynb
+test_generation_output.png

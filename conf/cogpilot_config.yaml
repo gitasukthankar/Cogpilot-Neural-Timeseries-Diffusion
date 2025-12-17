@@ -1,5 +1,15 @@
 # CogPilot Configuration
+defaults:
+  - base: wandb_default
+  - dataset: cogpilot
+  - network: ada_conv_cogpilot
+  - diffusion_kernel: white_noise
+  - diffusion: diffusion_linear_500
+  - optimizer: base_optimizer
+  - classifier: no_classifier
 
+
+"""
 # Dataset
 dataset:
   name: CogPilotDataset
@@ -7,9 +17,8 @@ dataset:
   signal_length: 512
   target_fs: 128.0
   base: wandb_default
-  
 
-"""
+
 # Model
 model:
   in_channels: 14

@@ -1,13 +1,27 @@
 self: ada_conv
-signal_channel: 14
 cond_dim: 1
-hidden_channel: 32
-in_kernel_size: 53
-out_kernel_size: 53
-slconv_kernel_size: 53
-num_scales: 4 # increase to capture different frequencies? 
-num_blocks: 3
+
+# Standard params
+signal_channel: 14 # total channels
+# Num of filters in the first layer
+hidden_channel: 32 
+
+# Standard convolution kernel sizes for up/downsampling
+in_kernel_size: 3
+out_kernel_size: 3
+
+# Kernel size for the structured long-convolution layer
+#  controls the effective receptive field
+slconv_kernel_size: 17
+
+# Multiplier for the kernel size at each scale
+num_scales: 4 
+
+# Used to capture complex temporal dependencies
+num_blocks: 3 
 num_off_diag: 8
-padding_mode: circular
+
+# Boundary handling
+padding_mode: zeros
 use_fft_conv: False
 use_pos_emb: True

@@ -70,6 +70,7 @@ def index_dataset(data_root, labels_path='data/processed/subject_labels.json', o
     """
     run_regex = re.compile(r'run-(\d+)$')
     subject_regex = re.compile(r'cp0(\d+)$')
+    level_regex = re.compile(r'level-(\d+)')
   
     index = []
     modalities = {
@@ -148,7 +149,12 @@ def index_dataset(data_root, labels_path='data/processed/subject_labels.json', o
                     subj_str = run_files[0].split('_')[0]
                     match = subject_regex.search(subj_str)
                     subj_num = int(match.group(1))
+                    
                     is_expert = expert_data[str(subj_num)]
+                    
+                    level_str = run_files[0]
+                    levelMatch = level_regex.search(level_str)
+                    level_num = int(levelMatch.group(1))
                     
                     run_num = int(run.split('_')[0])
                 
@@ -156,13 +162,16 @@ def index_dataset(data_root, labels_path='data/processed/subject_labels.json', o
                         'subject': subj_str,
                         'subject_num': subj_num,
                         'run_id': run_num,
+                        'level': level_num,
                         'root_folder': root,
                         'is_expert': is_expert,
-                        'files': modality_files
+                        'files': modality_files,
                     })
                     stats['valid_runs'] += 1
                 else:
                     stats['skipped_runs'] += 1
+                    
+    index.sort(key=lambda x: (x['subject_num']))
                     
     with open(output_json, 'w') as f:
         json.dump(index, f, indent=2)

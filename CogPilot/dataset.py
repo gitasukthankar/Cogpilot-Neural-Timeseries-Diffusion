@@ -10,6 +10,7 @@ from .preprocessing import CogPilotPhysiologicalDataSynchronizer
 import pickle
 import json
 import logging
+from functools import lru_cache
 log = logging.getLogger(__name__)
 
 class CogPilotDataset(Dataset):
@@ -23,13 +24,17 @@ class CogPilotDataset(Dataset):
     - 14 channels: ECG(3) + EDA(2) + EMG(5) + Resp(1) + ACC(3)
     - 4 second windows: 512 time points at 128 Hz
     """
-    def __init__(self, index_json, signal_length=512, target_fs=128.0, split='train'):
+    def __init__(self, index_json, signal_length=512, target_fs=128.0, split='train', cache_runs=True, preload_all=False):
         super().__init__()
         
         self.signal_length = signal_length
         self.target_fs = target_fs
         self.stats_file = "cogpilot_global_stats.pkl"
         self.run_lengths_file = "data/processed/cogpilot_run_lengths.pkl"
+        self.stride = self.signal_length // 2
+        
+        self.cache_runs = cache_runs
+        self.preload_all = preload_all
             
         self.run_index = self._load_and_split_index(index_json, split)
         
@@ -37,6 +42,11 @@ class CogPilotDataset(Dataset):
         self.synch = CogPilotPhysiologicalDataSynchronizer(target_fs=self.target_fs)
         
         self.run_lengths = {}
+        
+        # Run cache (if enabled)
+        if self.cache_runs:
+            self.run_cache = {}
+            log.info(f"Run caching enabled (cache_runs=True)")
             
         # compute normalization stats
         if split == 'train':
@@ -68,12 +78,10 @@ class CogPilotDataset(Dataset):
         self.samples = []
         self._build_sample_index()
         
-        """ run_index_len = len(self.run_index)
-        print(f"CogPilotDataset ({split}): {len(self.samples)} windows from {len(self.run_index)} runs")\
-        
-        # Count expert vs novice
-        n_expert = sum(1 for s in self.samples if s['is_expert'] == 1)
-        print(f"  Expert windows: {n_expert}, Novice windows: {len(self.samples) - n_expert}") """
+        if self.preload_all:
+            log.info("Preloading all runs into memory...")
+            self._preload_all_runs()
+            log.info(f"Preloaded {len(self.run_cache)} runs")
         
     def _calculate_global_stats(self):
         #Calculate the mean and std, saves length of each run to self.run_lengths  
@@ -102,6 +110,24 @@ class CogPilotDataset(Dataset):
             vals = df_synch[numeric_cols].values  # Shape: (n_samples, 14)
             
             
+            # print stuff
+            if i == 0:
+                print(f"\n DEBUG")
+                print(f"Run info: {run_info['subject']}, run {run_info['run_id']}")
+                print(f"Synch Shape: {vals.shape}")
+                print(f"Column 0 (ECG LL RA)") # I think
+                print(f"    Mean: {vals[:,  0].mean():.2f}")
+                print(f"    Std: {vals[:,  0].std():.2f}")
+                print(f"    Range: [{vals[:, 0].min():.2f}, {vals[:, 0].max():.2f}]")
+                print(f"\nColumn 2 (ECG LA RA):")
+                print(f"  Mean: {vals[:, 1].mean():.2f}")
+                print(f"  Std: {vals[:, 1].std():.2f}")
+                print(f"  Range: [{vals[:, 1].min():.2f}, {vals[:, 2].max():.2f}]")
+                print(f"\nColumn 2 (ECG_VX_RL):")
+                print(f"  Mean: {vals[:, 2].mean():.2f}")
+                print(f"  Std: {vals[:, 2].std():.2f}")
+                print(f"  Range: [{vals[:, 2].min():.2f}, {vals[:, 2].max():.2f}]")
+            
             # Welford's algorithm: update mean and variance incrementally
             for sample in vals:
                 n += 1
@@ -109,26 +135,6 @@ class CogPilotDataset(Dataset):
                 M += delta / n
                 delta2 = sample - M
                 S += delta * delta2          
-                    
-            """ # Accumulate Stats
-            sum_x += np.sum(vals, axis=0) # sum across time
-            sum_sq_x += np.sum(vals ** 2, axis=0) # sum of squares
-            total_count += len(df_synch) """
-                
-            """except Exception as e:
-                pass
-                #print(f"Skipping run {i}: {e}") """
-                # 
-        
-        #print(f"\nStats done. Processed {total_count} timepoints.")
-
-        # compute mean and std
-        """ mean_val = sum_x / total_count
-        var_val = (sum_sq_x / total_count) - (mean_val ** 2)
-        std_val = np.sqrt(np.maximum(var_val, 0))
-        print(f"mean val: {mean_val}") """
-        
-        #print(f"\nStatistics computed from {n} total samples across {len(run_lengths)} runs")
         
         # Compute final mean and std
         mean_val = M
@@ -137,10 +143,6 @@ class CogPilotDataset(Dataset):
         
         # Add small epsilon to prevent division by zero
         std_val = np.maximum(std_val, 1e-8)
-
-        """ print(f"\nFinal Statistics:")
-        print(f"  Channel means: min={mean_val.min():.3f}, max={mean_val.max():.3f}, mean={mean_val.mean():.3f}")
-        print(f"  Channel stds:  min={std_val.min():.3f}, max={std_val.max():.3f}, mean={std_val.mean():.3f}") """
         
         # Print per-channel stats
         channel_names = [
@@ -159,6 +161,17 @@ class CogPilotDataset(Dataset):
         std_tensor = torch.from_numpy(std_val).float().unsqueeze(1)
         
         return mean_tensor, std_tensor, run_lengths
+    
+    def _compute_run_lengths(self):
+        """Compute run lengths for test split."""
+        run_lengths = {}
+        for i, run_info in enumerate(self.run_index):
+            try:
+                df_sync = self.synch.synchronize_run(run_info['files'])
+                run_lengths[i] = len(df_sync)
+            except Exception as e:
+                log.warning(f"  Skipping run {i}: {e}")
+        return run_lengths
             
     def _load_and_split_index(self, index_json, split):
         # Load index
@@ -175,33 +188,9 @@ class CogPilotDataset(Dataset):
         
     def _build_sample_index(self):
         """
-        Build index of all valid windows across all runs
+        Build index of all windows with 50% overlap
         Each entry in self.samples represents one 4-second window
         """
-        
-        """ n_samples = 0
-        for run_indx, run_info in enumerate(self.run_index):
-            df_sync = self.synch.synchronize_run(run_info['files'])
-            
-            
-            n_samples = len(df_sync)
-            print(f"n samples: {n_samples}")
-            
-            # Calculate number of windows for this run
-            n_windows = (n_samples - self.signal_length) // 2
-            
-            # Create entry for each window
-            for window_idx in range(n_windows):
-                start_idx = window_idx
-                
-                self.samples.append({
-                    'run_idx': run_indx,
-                    'start_idx': start_idx,
-                    'is_expert': run_info['is_expert'],
-                    'subject': run_info['subject'],
-                    'subject_num': run_info['subject_num'],
-                    'run_id': run_info['run_id']
-                })  """
         
         n_samples = 0
         for run_indx, run_info in enumerate(self.run_index):
@@ -214,7 +203,16 @@ class CogPilotDataset(Dataset):
                 n_samples = len(df_sync)
             
             # Calculate number of windows for this run
-            n_windows = (n_samples - self.signal_length) // 2
+            n_windows = (n_samples - self.signal_length) // self.stride + 1
+            
+            is_expert = run_info['is_expert']
+            difficulty = run_info['level']
+            
+            # Create unified 8-class label
+            # 0-3: Novice Levels 1-4
+            # 4-7: Expert Levels 1-4
+            # Formula: (Expert * 4) + (Difficulty - 1)
+            unified_label = (is_expert * 4) + (difficulty - 1)
             
             # Create entry for each window
             for window_idx in range(n_windows):
@@ -222,12 +220,73 @@ class CogPilotDataset(Dataset):
                 
                 self.samples.append({
                     'run_idx': run_indx,
-                    'start_idx': start_idx,
-                    'is_expert': run_info['is_expert'],
+                    'start_idx': start_idx, #* self.stride,
+                    'is_expert': is_expert,
                     'subject': run_info['subject'],
                     'subject_num': run_info['subject_num'],
-                    'run_id': run_info['run_id']
+                    'run_id': run_info['run_id'],
+                    'label': unified_label,
                 })
+    
+    def _preload_all_runs(self):
+        """Preload all runs into memory """
+        unique_runs = set(s['run_idx'] for s in self.samples)
+        for run_idx in unique_runs:
+            self._load_run(run_idx)
+                
+    def _load_run(self, run_idx):
+        """Load and cache a single run"""
+        
+        if run_idx in self.run_cache:
+            return self.run_cache[run_idx]
+    
+        run_info = self.run_index[run_idx]
+        
+        # DEBUG: Print before synchronization
+        print(f"\n=== LOADING RUN {run_idx} ===")
+        print(f"Files: {run_info['files']}")
+        
+        df_sync = self.synch.synchronize_run(run_info['files'])
+        
+        # DEBUG: Check synchronized data
+        print(f"Synchronized data shape: {df_sync.shape}")
+        print(f"Columns: {df_sync.columns.tolist()}")
+        
+        # Extract numeric data
+        numeric_cols = df_sync.select_dtypes(include=[np.number]).columns
+        data = df_sync[numeric_cols].values  # (n_samples, 14)
+        
+        # DEBUG: Check extracted data
+        print(f"Extracted numeric data shape: {data.shape}")
+        print(f"ECG_LL_RA column (assumed first): mean={data[:, 0].mean():.2f}, std={data[:, 0].std():.2f}")
+        print(f"Expected: mean around -38, std around 10")
+        print("="*40)
+        
+        # Convert to tensor and cache
+        data_tensor = torch.from_numpy(data.T).float()  # (14, n_samples)
+        
+        if self.cache_runs:
+            self.run_cache[run_idx] = data_tensor
+        
+        return data_tensor
+        
+        """ if run_idx in self.run_cache:
+            return self.run_cache[run_idx]
+    
+        run_info = self.run_index[run_idx]
+        df_sync = self.synch.synchronize_run(run_info['files'])
+        
+        # Extract numeric data
+        numeric_cols = df_sync.select_dtypes(include=[np.number]).columns
+        data = df_sync[numeric_cols].values  # (n_samples, 14)
+        
+        # Convert to tensor and cache
+        data_tensor = torch.from_numpy(data.T).float()  # (14, n_samples)
+        
+        if self.cache_runs:
+            self.run_cache[run_idx] = data_tensor
+        
+        return data_tensor """
                 
     def __len__(self):
         return len(self.samples)
@@ -239,77 +298,77 @@ class CogPilotDataset(Dataset):
         Returns:
         
             - signal: (channels, time) = (14, 512) tensor
-            - cond: (1,) dict with expert/novince label
+            - cond: (1, 512) dict with expert/novince label
             - label: (1,) tensor for classification experiments
+            
+            updates
+            - label: scalar tensor (0-7)
+            - cond: scalar tensor (0-7) same as above
         """
         sample_info = self.samples[indx]
-        run_info = self.run_index[sample_info['run_idx']]
+        run_idx = sample_info['run_idx']
         
-        # Load a single run and stack all modalities together
-        df_synch = self.synch.synchronize_run(run_info['files'])
+        # Load run
+        data = self._load_run(run_idx)
         
         # Extract window
-        start = sample_info['start_idx']
+        start = sample_info['start_idx'] * self.stride
         end = start + self.signal_length
         
-        # Safety check for time
-        if end > len(df_synch):
-            start = max(0, len(df_synch) - self.signal_length)
-            end = len(df_synch)
-        
         # Get numpy array: (time, channels) - (512, 14)
-        window = df_synch.iloc[start:end].values
+        # Get tensor slice: (Channels, Time) = (14, 512)
+        x = data[:, start:end]  # 
         
         # Ensure correct length
-        if len(window) < self.signal_length:
-            pad_length = self.signal_length - len(window)
-            window = np.pad(window, ((0, pad_length), (0, 0)), mode='edge')
+        """ if len(x) < self.signal_length:
+            pad_length = self.signal_length - len(x)
+            x = np.pad(x, ((0, pad_length), (0, 0)), mode='edge') """
+        # Pad if needed
+        if x.shape[1] < self.signal_length:
+            pad_length = self.signal_length - x.shape[1]
+            x = torch.nn.functional.pad(x, (0, pad_length), mode='replicate')
             
-            
-        # Transpose to (Channels, Time) -> (14, 512)
-        x = torch.from_numpy(window.T).float()
+        # BEFORE normalization
+        if indx == 0:  # Print once
+            print(f"\n=== DATASET DEBUG (index={indx}) ===")
+            print(f"Raw signal ECG_LL_RA: mean={x[0].mean():.2f}, std={x[0].std():.2f}, range=[{x[0].min():.2f}, {x[0].max():.2f}]")
+            print(f"channel_mean shape: {self.channel_mean.shape}, values: {self.channel_mean.flatten()[:3]}")
+            print(f"channel_std shape: {self.channel_std.shape}, values: {self.channel_std.flatten()[:3]}")
         
-        """
-        # BELOW WILL HAVE THE BIGGEST CHANGE
-        # Normalize 
-        # Calculate Mean and Std for EACH channel separately (axis=1 is time)
-        # keepdims=True ensures shapes are (14, 1) for broadcasting
-        ch_mean = np.mean(x, axis=1, keepdims=True)
-        ch_std = np.std(x, axis=1, keepdims=True)
-        
-        # Add Epsilon to prevent division by zero
-        # If a channel is flat (std=0), this makes the divisor 1e-8
-        epsilon = 1e-8
-        x_norm = (x - ch_mean) / (ch_std + epsilon) """
-        # Normalize channels
+        # Global normalization
         x_norm = (x - self.channel_mean) / self.channel_std
         
-        # Convert to Float Tensor
-        #signal_tensor = torch.from_numpy(x_norm).float()
-        is_expert = float(sample_info['is_expert'])
-        cond_tensor = torch.ones(1, self.signal_length) * is_expert
-        #cond_tensor = torch.tensor([is_expert], dtype=torch.float32)  # Shape: (1,) <- doesn't work for recent changes
-        label_tensor = torch.tensor([is_expert], dtype=torch.float32)
+        # AFTER normalization
+        if indx == 0:
+            print(f"Normalized ECG_LL_RA: mean={x_norm[0].mean():.4f}, std={x_norm[0].std():.4f}")
+            print(f"Expected: mean≈0.0, std≈1.0")
+            print(f"=================================\n")
         
+        # Conditioning, using the new label
+        label_val = sample_info['label']
+        
+        # Conditioning        
+        #cond_tensor = torch.ones(1, self.signal_length) * is_expert # this is the shape (1, 512) <- but two others say it isn't correct as AdaConv expects (1,)
+
+        # new change, as we aren't sure if the condition is being used correctly
+        #cond_tensor = torch.tensor([is_expert], dtype=torch.float32)  # shape (1,)
+        #is_expert = float(sample_info['is_expert'])
+        #label_tensor = torch.tensor([is_expert], dtype=torch.float32)
+        label_tensor = torch.tensor(label_val, dtype=torch.long) # <- new change, unified label
+        # cond_emb expects (batch, cond_dim, length)
+        
+        
+        # new thign added
+        #cond_tensor = torch.tensor([float(label_val)], dtype=torch.float32)  # Shape: (1,)
+        #cond_tensor = torch.tensor([float(label_val)], dtype=torch.float32)  # ← Correct shape, 2nd try
+        
+        cond_tensor = torch.full((1, self.signal_length), float(label_val), dtype=torch.float32)
+        # Shape: (1, 512) → becomes (batch, 1, 512) after DataLoader batching
         
         return {
-            "signal": x_norm, 
-            "cond": cond_tensor,  #.float(),
-            "label":  label_tensor
+            "signal": x_norm,
+            "cond": cond_tensor,  # (1,) → becomes (batch, 1) after batching, new thing: # (1, 512) → becomes (batch, 1, 512)
+            "label": label_tensor # only used for expierments
         }
-        
-    def denomoralize(self, normalized_data):
-        """
-        Denormalize data back to its original scale
-
-        Args:
-            normalized_data (torch.Tensor of shape): (n_channels, n_timepoints)
-            
-        Returns:
-            denormalized_data: same shape as input
-        """
-        if normalized_data.ndim == 2:
-            # (channels, time) case
-            return normalized_data * self.channel_std + self.channel_mean
        
             

@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 from CogPilot.preprocessing import generate_expert_labels, index_dataset
+import logging
+log = logging.getLogger(__name__)
 
 # CONFIGURATION 
 RAW_DATA_ROOT = "dataPackage/task-ils"  

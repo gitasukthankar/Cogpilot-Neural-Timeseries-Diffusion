@@ -1,5 +1,10 @@
 self: cogpilot
+
+# parameters passed into CogPilotDataset.__init__
 index_json: "data/processed/dataset_index.json"
-signal_length: 512
+signal_length: 512 # change to 1024 for 8s
 target_fs: 128.0
 split: "train"
+
+with_class_cond: True
+num_classes: 8

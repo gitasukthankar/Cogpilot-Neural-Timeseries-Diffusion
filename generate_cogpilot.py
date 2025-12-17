@@ -42,9 +42,27 @@ LEVEL_SEQUENCE = [
     "04B", "02B", "03B", "01B"   # Runs 9-12
 ]
 
+# Level mapping: matches your dataset unified_label calculation
+# Formula: label = (is_expert * 4) + (difficulty - 1)
+LEVEL_MAP = {
+    0: {"expertise": "Novice", "level": 1, "level_code": "01B"},
+    1: {"expertise": "Novice", "level": 2, "level_code": "02B"},
+    2: {"expertise": "Novice", "level": 3, "level_code": "03B"},
+    3: {"expertise": "Novice", "level": 4, "level_code": "04B"},
+    4: {"expertise": "Expert", "level": 1, "level_code": "01B"},
+    5: {"expertise": "Expert", "level": 2, "level_code": "02B"},
+    6: {"expertise": "Expert", "level": 3, "level_code": "03B"},
+    7: {"expertise": "Expert", "level": 4, "level_code": "04B"},
+}
+
+def decode_label(label_index):
+    """Helper to decode unified label to human-readable format."""
+    return LEVEL_MAP.get(int(label_index), {"expertise": "Unknown", "level": 0, "level_code": "00B"})
+
+
 OUTPUT_ROOT = Path("generated_data_root")
 NUM_SUBJECTS = 20
-WINDOWS_PER_RUN = 18
+WINDOWS_PER_RUN = 1
 START_DT = datetime(2021, 1, 1, 12, 0, 0)
 
 @hydra.main(version_base=None, config_path="conf", config_name="config")
@@ -94,7 +112,117 @@ def generate(cfg):
     fs = cfg.dataset.target_fs
     samples_per_run = WINDOWS_PER_RUN * signal_length
     
-    # Generate Subjects
+    for subject_index in range(1, NUM_SUBJECTS + 1):
+        current_dt = START_DT
+        
+        # Determine expertise: even IDs = Expert, odd IDs = Novice
+        is_expert = 1 if subject_index % 2 == 0 else 0
+        expertise_type = "Expert" if is_expert else "Novice"
+        
+        subject_id = f'sub-cp{subject_index:03d}'
+        
+        log.info("")
+        log.info(f"Generating {subject_id} ({expertise_type})")
+        log.info("-" * 70)
+        
+        session_id = "ses-20230101"
+        
+        # Generate 12 runs (4 levels × 3 blocks)
+        run_counter = 1
+        
+        for block_idx in range(3):  # 3 blocks
+            log.info(f"  Block {block_idx + 1}/3:")
+            
+            for level_idx in range(4):  # 4 levels per block
+                # Get level for this run from the sequence
+                global_run_idx = block_idx * 4 + level_idx
+                level_code = LEVEL_SEQUENCE[global_run_idx]
+                
+                # Convert level_code to difficulty number
+                difficulty = int(level_code[1])  # "01B" -> 1, "04B" -> 4
+                
+                # Calculate unified label (matching dataset logic)
+                # Formula: label = (is_expert * 4) + (difficulty - 1)
+                unified_label = (is_expert * 4) + (difficulty - 1)
+                
+                # Verify it matches our LEVEL_MAP
+                level_info = LEVEL_MAP[unified_label]
+                assert level_info['level'] == difficulty, "Label mismatch!"
+                assert level_info['expertise'] == expertise_type, "Expertise mismatch!"
+                
+                run_name = f"level-{level_code}_run-{run_counter:03d}"
+                run_path = OUTPUT_ROOT / "task-ils" / subject_id / session_id / run_name
+                run_path.mkdir(parents=True, exist_ok=True)
+                
+                # Create conditioning tensor for this specific run
+                # Shape: (batch=1, cond_dim=1, length=512)
+                # AdaConv's GeneralEmbedder expects 3D: (batch, cond_dim, length)
+                cond_tensor = torch.full(
+                    (WINDOWS_PER_RUN, 1, signal_length), 
+                    float(unified_label), 
+                    dtype=torch.float32,
+                    device=device
+                )
+                
+                log.info(f"    Run {run_counter:02d}: Level {level_code} (label={unified_label}, {expertise_type})")
+                
+                # GENERATE SYNTHETIC DATA
+                with torch.no_grad():
+                    samples = generate_samples(
+                        diffusion=diffusion,
+                        total_num_samples=WINDOWS_PER_RUN,
+                        batch_size=WINDOWS_PER_RUN,
+                        cond=cond_tensor
+                    )
+                    # samples shape: (batch=1, channels=14, time=512)
+                
+                # Un-normalize data
+                # samples is on GPU, move to CPU
+                samples_cpu = samples.cpu().numpy()  # (1, 14, 512)
+                
+                # Remove batch dimension since WINDOWS_PER_RUN=1
+                signal_norm = samples_cpu[0]  # (14, 512)
+                
+                # Apply inverse normalization
+                signal_raw = (signal_norm * global_std) + global_mean  # (14, 512) -> has to change as we now have a shape of (14, 1)
+                
+                # Transpose to (Time, Channels) for CSV
+                signal_final = signal_raw.T  # (512, 14)
+                
+                # Create time column
+                time_deltas = pd.to_timedelta(np.arange(samples_per_run) / fs, unit='s')
+                time_col = current_dt + time_deltas
+                current_dt = time_col[-1] + pd.Timedelta(seconds=5)  # 5s gap between runs
+                
+                # SAVE INDIVIDUAL CSVs FOR EACH MODALITY
+                for modality, channel_slice in CHANNEL_MAP.items():
+                    # Extract columns for this modality
+                    mod_data = signal_final[:, channel_slice]
+                    
+                    # Construct filename
+                    base_fname = f"{subject_id}_{session_id}_task-ils_{FILE_SUFFIXES[modality]}_feat-chunk_{run_name}"
+                    dat_file = run_path / f"{base_fname}_dat.csv"
+                    hea_file = run_path / f"{base_fname}_hea.csv"
+                    
+                    # Save data CSV with time column
+                    df = pd.DataFrame(mod_data, columns=COL_NAMES[modality])
+                    df.insert(0, 'time_dn', time_col)
+                    df.to_csv(dat_file, index=False)
+                    
+                    # Save header CSV with metadata
+                    hea_df = pd.DataFrame({
+                        'Fs_Hz': [fs],
+                        'duration_s': [samples_per_run / fs],
+                        'num_samples': [samples_per_run],
+                        'expertise': [expertise_type],
+                        'level': [difficulty],
+                        'unified_label': [unified_label]
+                    })
+                    hea_df.to_csv(hea_file, index=False)
+                
+                run_counter += 1
+    
+    """ # Generate Subjects
     for subject_index in range(1, NUM_SUBJECTS+1):
         current_dt = START_DT
         
@@ -104,92 +232,113 @@ def generate(cfg):
         
         subject_id = f'sub-cp{subject_index:03d}'
         
-        print(f"Generating {subject_id}")
+        log.info(f"Generating {subject_id}")
         
         # Create Conditioning Tensor for this subject
-        # Shape: (Batch, 1, Signal_Length) -> (4, 1, 512)  <- old version
         # shape: (batch, 1) for NTD AdaConv
-        cond_tensor = torch.ones(WINDOWS_PER_RUN, 1, signal_length).to(device) * is_expert
-        #cond_tensor = torch.ones(WINDOWS_PER_RUN, 1, signal).to(device) * is_expert
+        
+        ###new cond_tensor, as the AdaConv expects this shape: (batch_size, cond_dim)
+        ###cond_tensor = torch.ones(WINDOWS_PER_RUN, 1, signal_length).to(device) * is_expert
+        #cond_tensor = torch.full((WINDOWS_PER_RUN, 1), is_expert, device=device)
 
         #Session ID
         session_id = "ses-20230101"
         
         # Generate 4 Levels x 4 Runs 
-        run_global_counter = 1
+        run_counter = 1
         levels = ["01B", "03B", "02B", "04B"]
         
-        for i, level in enumerate(LEVEL_SEQUENCE):
-            for run_num in range(1, 4): # 3 runs per level
-                # Folder: level-01B_run-001
-                run_num = i + 1
+        for block_idx in range(3):  # 3 blocks
+            log.info(f"  Block {block_idx + 1}/3:")
+            
+            for level_idx in range(4):  # 4 levels per block
+                # Get level for this run from the sequence
+                global_run_idx = block_idx * 4 + level_idx
+                level_code = LEVEL_SEQUENCE[global_run_idx]
                 
-                run_name = f"level-{level}_run-{run_num:03d}"
+                # Convert level_code to difficulty number
+                difficulty = int(level_code[1])  # "01B" -> 1, "04B" -> 4
+                
+                # Calculate unified label (matching dataset logic)
+                # Formula: label = (is_expert * 4) + (difficulty - 1)
+                unified_label = (is_expert * 4) + (difficulty - 1)
+                
+                # Verify it matches our LEVEL_MAP
+                level_info = LEVEL_MAP[unified_label]
+                assert level_info['level'] == difficulty, "Label mismatch!"
+                assert level_info['expertise'] == expertise_type, "Expertise mismatch!"
+                
+                run_name = f"level-{level_code}_run-{run_counter:03d}"
                 run_path = OUTPUT_ROOT / "task-ils" / subject_id / session_id / run_name
                 run_path.mkdir(parents=True, exist_ok=True)
                 
-                # GENERATE SYNTHETIC DATA!!!!!
+                # Create conditioning tensor for this specific run
+                # Shape: (batch=1, cond_dim=1, length=512)
+                # AdaConv's GeneralEmbedder expects 3D: (batch, cond_dim, length)
+                cond_tensor = torch.full(
+                    (WINDOWS_PER_RUN, 1, signal_length), 
+                    float(unified_label), 
+                    dtype=torch.float32,
+                    device=device
+                )
+                
+                log.info(f"    Run {run_counter:02d}: Level {level_code} (label={unified_label}, {expertise_type})")
+                
+                # GENERATE SYNTHETIC DATA
                 with torch.no_grad():
                     samples = generate_samples(
                         diffusion=diffusion,
                         total_num_samples=WINDOWS_PER_RUN,
                         batch_size=WINDOWS_PER_RUN,
                         cond=cond_tensor
-                    ) 
-                    # samples shape: (Windows=4s, Channels=14, Time=512)
-                    
-                # Un-normalize data
-                samples_np = samples.cpu().numpy()
-                    
-                # Stitch windows together to make one continuous "stream"
-                # (4, 14, 512) -> (14, 4*512) -> (2048, 14) for CSV files
-                stitched_signal_norm = samples.permute(1, 0, 2).reshape(14, -1).cpu().numpy() #.T
+                    )
+                    # samples shape: (batch=1, channels=14, time=512)
                 
-                # Apply the Inverse
-                # global_std/mean is (14, 1)
-                stitched_signal_raw = (stitched_signal_norm * global_std) + global_mean
+                # Un-normalize data
+                # samples is on GPU, move to CPU
+                samples_cpu = samples.cpu().numpy()  # (1, 14, 512)
+                
+                # Remove batch dimension since WINDOWS_PER_RUN=1
+                signal_norm = samples_cpu[0]  # (14, 512)
+                
+                # Apply inverse normalization
+                signal_raw = (signal_norm * global_std) + global_mean  # (14, 512)
                 
                 # Transpose to (Time, Channels) for CSV
-                stitched_signal_final = stitched_signal_raw.T
+                signal_final = signal_raw.T  # (512, 14)
                 
-                # Time column
+                # Create time column
                 time_deltas = pd.to_timedelta(np.arange(samples_per_run) / fs, unit='s')
                 time_col = current_dt + time_deltas
-                current_dt = time_col[-1] + pd.Timedelta(seconds=5)
+                current_dt = time_col[-1] + pd.Timedelta(seconds=5)  # 5s gap between runs
                 
-                ## Add time
-                #n_samples = stitched_signal.shape[0]
-                
-                # SAVE INDIVIDUAL CSVs
-                for mod, slicer in CHANNEL_MAP.items():
-                    # Extract columns for this modality 
-                    mod_data = stitched_signal_final[:, slicer]
+                # SAVE INDIVIDUAL CSVs FOR EACH MODALITY
+                for modality, channel_slice in CHANNEL_MAP.items():
+                    # Extract columns for this modality
+                    mod_data = signal_final[:, channel_slice]
                     
-                    # Construct Filename
-                    # sub-cp001_ses-20230101_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-001_dat.csv
-                    base_fname = f"{subject_id}_{session_id}_task-ils_{FILE_SUFFIXES[mod]}_feat-chunk_{run_name}"
+                    # Construct filename
+                    base_fname = f"{subject_id}_{session_id}_task-ils_{FILE_SUFFIXES[modality]}_feat-chunk_{run_name}"
                     dat_file = run_path / f"{base_fname}_dat.csv"
                     hea_file = run_path / f"{base_fname}_hea.csv"
                     
-                    # Save Data CSV with headers
-                    df = pd.DataFrame(mod_data, columns=COL_NAMES[mod])
+                    # Save data CSV with time column
+                    df = pd.DataFrame(mod_data, columns=COL_NAMES[modality])
                     df.insert(0, 'time_dn', time_col)
                     df.to_csv(dat_file, index=False)
                     
-                    # Save Header CSV (Simple metadata)
-                    with open(hea_file, 'w') as f:
-                        f.write(f"samplingRate {cfg.dataset.target_fs}\n")
-                        f.write(f"numChannels {mod_data.shape[1]}\n")
-                        #f.write(f"is_expert {is_expert}\n")
-                        
+                    # Save header CSV with metadata
                     hea_df = pd.DataFrame({
-                        #'time_dn': [time], # need to fix
                         'Fs_Hz': [fs],
-                        #'sampleCount': [n_samples]
+                        'duration_s': [samples_per_run / fs],
+                        'num_samples': [samples_per_run],
+                        'expertise': [expertise_type],
+                        'level': [difficulty],
+                        'unified_label': [unified_label]
                     })
                     hea_df.to_csv(hea_file, index=False)
-
-                run_global_counter += 1
+                
+                run_counter += 1 """
             
     print("\nGeneration Complete!")
     print(f"Data saved to: {OUTPUT_ROOT.resolve()}")
