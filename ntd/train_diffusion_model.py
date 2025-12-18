@@ -47,13 +47,28 @@ from ntd.utils.utils import config_saver, count_parameters
 
 log = logging.getLogger(__name__)
 
+def get_base_dataset(dataset):
+    """
+    Get the underlying dataset from a Subset.
+    
+    Args:
+        dataset: Either a Dataset or Subset
+        
+    Returns:
+        The base dataset
+    """
+    if isinstance(dataset, Subset):
+        return dataset.dataset
+    return dataset
+
 
 def create_stratified_subset(dataset, target_size, seed=42):
     """
     Create a stratified subset that samples evenly from all runs.
+    Works with both raw datasets and Subsets.
     
     Args:
-        dataset: CogPilotDataset instance
+        dataset: CogPilotDataset instance or Subset
         target_size: Desired number of samples (e.g., 10000)
         seed: Random seed for reproducibility
         
@@ -62,26 +77,36 @@ def create_stratified_subset(dataset, target_size, seed=42):
     """
     np.random.seed(seed)
     
-    # Get run indices for each sample
-    # dataset.samples is a list of dicts with 'run_idx'
-    run_indices = np.array([sample['run_idx'] for sample in dataset.samples])
+    # Handle Subset: get base dataset and map indices
+    if isinstance(dataset, Subset):
+        base_dataset = dataset.dataset
+        valid_indices = np.array(dataset.indices)
+        log.info(f"Input is a Subset with {len(valid_indices)} samples")
+    else:
+        base_dataset = dataset
+        valid_indices = np.arange(len(dataset))
+        log.info(f"Input is a full dataset with {len(valid_indices)} samples")
+    
+    # Get run indices for each valid sample
+    run_indices = np.array([base_dataset.samples[idx]['run_idx'] for idx in valid_indices])
     unique_runs = np.unique(run_indices)
     
-    print(f"Total samples: {len(dataset)}")
-    print(f"Total unique runs: {len(unique_runs)}")
-    print(f"Target subset size: {target_size}")
+    log.info(f"Total samples: {len(valid_indices)}")
+    log.info(f"Total unique runs: {len(unique_runs)}")
+    log.info(f"Target subset size: {target_size}")
     
     # Calculate samples per run
     samples_per_run = target_size // len(unique_runs)
     remainder = target_size % len(unique_runs)
     
-    print(f"Sampling ~{samples_per_run} windows per run")
+    log.info(f"Sampling ~{samples_per_run} windows per run")
     
     selected_indices = []
     
     for i, run_idx in enumerate(unique_runs):
-        # Get all indices for this run
-        run_samples = np.where(run_indices == run_idx)[0]
+        # Get all indices for this run (in the valid_indices space)
+        run_mask = run_indices == run_idx
+        run_samples = valid_indices[run_mask]
         
         # How many to sample from this run
         n_from_run = samples_per_run + (1 if i < remainder else 0)
@@ -94,30 +119,29 @@ def create_stratified_subset(dataset, target_size, seed=42):
     selected_indices = np.array(selected_indices)
     np.random.shuffle(selected_indices)  # Shuffle to mix runs
     
-    print(f"Selected {len(selected_indices)} samples from {len(unique_runs)} runs")
+    log.info(f"Selected {len(selected_indices)} samples from {len(unique_runs)} runs")
     
     # Verify coverage
-    selected_run_indices = run_indices[selected_indices]
+    selected_run_indices = np.array([base_dataset.samples[idx]['run_idx'] for idx in selected_indices])
     unique_selected_runs = np.unique(selected_run_indices)
-    print(f"Coverage: {len(unique_selected_runs)}/{len(unique_runs)} runs ({len(unique_selected_runs)/len(unique_runs)*100:.1f}%)")
+    log.info(f"Coverage: {len(unique_selected_runs)}/{len(unique_runs)} runs ({len(unique_selected_runs)/len(unique_runs)*100:.1f}%)")
     
     # Check class balance
-    labels = np.array([dataset.samples[i]['label'] for i in selected_indices])
+    labels = np.array([base_dataset.samples[idx]['label'] for idx in selected_indices])
     unique_labels, counts = np.unique(labels, return_counts=True)
-    print(f"\nClass distribution in subset:")
+    log.info(f"\nClass distribution in subset:")
     for label, count in zip(unique_labels, counts):
-        print(f"  Class {label}: {count} samples ({count/len(selected_indices)*100:.1f}%)")
+        log.info(f"  Class {label}: {count} samples ({count/len(selected_indices)*100:.1f}%)")
     
-    return Subset(dataset, selected_indices.tolist())
+    # Return Subset with indices into the BASE dataset
+    return Subset(base_dataset, selected_indices.tolist())
 
-
-def set_seed(seed: int):
+def set_seed(seed):
     """
-    Set the seed for all random number generators and switch to deterministic algorithms.
-    This can hurt performance!
+    Set the seed for all random number generators and switch to deterministic algorithms
 
     Args:
-        seed: The random seed.
+        seed: The random seed
     """
 
     np.random.seed(seed)
@@ -634,7 +658,7 @@ def training_and_eval_pipeline(cfg):
 
     train_data_set, test_data_set = init_dataset(cfg)
     
-    if "debug" in str(cfg.base.experiment):
+    """ if "debug" in str(cfg.base.experiment):
         log.info("!!! DEBUG MODE DETECTED: TRUNCATING DATASET !!!")
         
         # Option 1: Sample evenly from all runs (maintains run diversity)
@@ -647,26 +671,9 @@ def training_and_eval_pipeline(cfg):
             test_data_set,
             target_size=2000, 
             seed=42
-        )
-        
-        # Option 2: Sample evenly from all classes (maintains class balance)
-        # train_data_set = create_stratified_subset_by_label(
-        #     train_data_set,
-        #     target_size=10000,
-        #     seed=42
-        # )
-        # test_data_set = create_stratified_subset_by_label(
-        #     test_data_set,
-        #     target_size=2000,
-        #     seed=42
-        # )
+        ) """
         
         
-        """ # Use only 10,000 samples for training and 2,000 for testing
-        train_data_set = torch.utils.data.Subset(train_data_set, range(5000))
-        test_data_set = torch.utils.data.Subset(test_data_set, range(1000))
-        log.info(f"New dataset sizes -> Train: {len(train_data_set)}, Test: {len(test_data_set)}") """
-
     train_loader = DataLoader(
         train_data_set,
         batch_size=cfg.optimizer.train_batch_size,

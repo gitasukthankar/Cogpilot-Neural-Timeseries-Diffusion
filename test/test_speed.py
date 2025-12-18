@@ -1,7 +1,3 @@
-"""
-Diagnostic script to identify training bottlenecks
-Run this to profile your training loop
-"""
 import torch
 import time
 import numpy as np

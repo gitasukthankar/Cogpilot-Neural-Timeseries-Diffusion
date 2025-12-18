@@ -5,7 +5,7 @@
     "run_id": 1,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp004/ses-20210330/level-01B_run-001",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp004/ses-20210330/level-01B_run-001/sub-cp004_ses-20210330_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-001_dat.csv",
@@ -45,7 +45,7 @@
     "run_id": 2,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp004/ses-20210330/level-03B_run-002",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp004/ses-20210330/level-03B_run-002/sub-cp004_ses-20210330_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-002_dat.csv",
@@ -85,7 +85,7 @@
     "run_id": 3,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp004/ses-20210330/level-02B_run-003",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp004/ses-20210330/level-02B_run-003/sub-cp004_ses-20210330_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-003_dat.csv",
@@ -125,7 +125,7 @@
     "run_id": 4,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp004/ses-20210330/level-04B_run-004",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp004/ses-20210330/level-04B_run-004/sub-cp004_ses-20210330_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-004_dat.csv",
@@ -165,7 +165,7 @@
     "run_id": 5,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp004/ses-20210330/level-03B_run-005",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp004/ses-20210330/level-03B_run-005/sub-cp004_ses-20210330_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-005_dat.csv",
@@ -205,7 +205,7 @@
     "run_id": 6,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp004/ses-20210330/level-04B_run-006",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp004/ses-20210330/level-04B_run-006/sub-cp004_ses-20210330_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-006_dat.csv",
@@ -245,7 +245,7 @@
     "run_id": 7,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp004/ses-20210330/level-01B_run-007",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp004/ses-20210330/level-01B_run-007/sub-cp004_ses-20210330_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-007_dat.csv",
@@ -285,7 +285,7 @@
     "run_id": 8,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp004/ses-20210330/level-02B_run-008",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp004/ses-20210330/level-02B_run-008/sub-cp004_ses-20210330_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-008_dat.csv",
@@ -325,7 +325,7 @@
     "run_id": 9,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp004/ses-20210330/level-04B_run-009",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp004/ses-20210330/level-04B_run-009/sub-cp004_ses-20210330_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-009_dat.csv",
@@ -365,7 +365,7 @@
     "run_id": 10,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp004/ses-20210330/level-02B_run-010",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp004/ses-20210330/level-02B_run-010/sub-cp004_ses-20210330_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-010_dat.csv",
@@ -405,7 +405,7 @@
     "run_id": 11,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp004/ses-20210330/level-03B_run-011",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp004/ses-20210330/level-03B_run-011/sub-cp004_ses-20210330_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-011_dat.csv",
@@ -445,7 +445,7 @@
     "run_id": 12,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp004/ses-20210330/level-01B_run-012",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp004/ses-20210330/level-01B_run-012/sub-cp004_ses-20210330_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-012_dat.csv",
@@ -4165,7 +4165,7 @@
     "run_id": 1,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp017/ses-20210521/level-01B_run-001",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp017/ses-20210521/level-01B_run-001/sub-cp017_ses-20210521_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-001_dat.csv",
@@ -4205,7 +4205,7 @@
     "run_id": 2,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp017/ses-20210521/level-03B_run-002",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp017/ses-20210521/level-03B_run-002/sub-cp017_ses-20210521_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-002_dat.csv",
@@ -4245,7 +4245,7 @@
     "run_id": 3,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp017/ses-20210521/level-02B_run-003",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp017/ses-20210521/level-02B_run-003/sub-cp017_ses-20210521_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-003_dat.csv",
@@ -4285,7 +4285,7 @@
     "run_id": 4,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp017/ses-20210521/level-04B_run-004",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp017/ses-20210521/level-04B_run-004/sub-cp017_ses-20210521_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-004_dat.csv",
@@ -4325,7 +4325,7 @@
     "run_id": 5,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp017/ses-20210521/level-03B_run-005",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp017/ses-20210521/level-03B_run-005/sub-cp017_ses-20210521_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-005_dat.csv",
@@ -4365,7 +4365,7 @@
     "run_id": 6,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp017/ses-20210521/level-04B_run-006",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp017/ses-20210521/level-04B_run-006/sub-cp017_ses-20210521_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-006_dat.csv",
@@ -4405,7 +4405,7 @@
     "run_id": 7,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp017/ses-20210521/level-01B_run-007",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp017/ses-20210521/level-01B_run-007/sub-cp017_ses-20210521_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-007_dat.csv",
@@ -4445,7 +4445,7 @@
     "run_id": 8,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp017/ses-20210521/level-02B_run-008",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp017/ses-20210521/level-02B_run-008/sub-cp017_ses-20210521_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-008_dat.csv",
@@ -4485,7 +4485,7 @@
     "run_id": 9,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp017/ses-20210521/level-04B_run-009",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp017/ses-20210521/level-04B_run-009/sub-cp017_ses-20210521_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-009_dat.csv",
@@ -4525,7 +4525,7 @@
     "run_id": 10,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp017/ses-20210521/level-02B_run-010",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp017/ses-20210521/level-02B_run-010/sub-cp017_ses-20210521_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-010_dat.csv",
@@ -4565,7 +4565,7 @@
     "run_id": 11,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp017/ses-20210521/level-03B_run-011",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp017/ses-20210521/level-03B_run-011/sub-cp017_ses-20210521_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-011_dat.csv",
@@ -4605,7 +4605,7 @@
     "run_id": 12,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp017/ses-20210521/level-01B_run-012",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp017/ses-20210521/level-01B_run-012/sub-cp017_ses-20210521_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-012_dat.csv",
@@ -8005,7 +8005,7 @@
     "run_id": 1,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp026/ses-20210716/level-01B_run-001",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp026/ses-20210716/level-01B_run-001/sub-cp026_ses-20210716_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-001_dat.csv",
@@ -8045,7 +8045,7 @@
     "run_id": 2,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp026/ses-20210716/level-03B_run-002",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp026/ses-20210716/level-03B_run-002/sub-cp026_ses-20210716_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-002_dat.csv",
@@ -8085,7 +8085,7 @@
     "run_id": 3,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp026/ses-20210716/level-02B_run-003",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp026/ses-20210716/level-02B_run-003/sub-cp026_ses-20210716_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-003_dat.csv",
@@ -8125,7 +8125,7 @@
     "run_id": 4,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp026/ses-20210716/level-04B_run-004",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp026/ses-20210716/level-04B_run-004/sub-cp026_ses-20210716_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-004_dat.csv",
@@ -8165,7 +8165,7 @@
     "run_id": 5,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp026/ses-20210716/level-03B_run-005",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp026/ses-20210716/level-03B_run-005/sub-cp026_ses-20210716_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-005_dat.csv",
@@ -8205,7 +8205,7 @@
     "run_id": 6,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp026/ses-20210716/level-04B_run-006",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp026/ses-20210716/level-04B_run-006/sub-cp026_ses-20210716_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-006_dat.csv",
@@ -8245,7 +8245,7 @@
     "run_id": 7,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp026/ses-20210716/level-01B_run-007",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp026/ses-20210716/level-01B_run-007/sub-cp026_ses-20210716_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-007_dat.csv",
@@ -8285,7 +8285,7 @@
     "run_id": 8,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp026/ses-20210716/level-02B_run-008",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp026/ses-20210716/level-02B_run-008/sub-cp026_ses-20210716_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-008_dat.csv",
@@ -8325,7 +8325,7 @@
     "run_id": 9,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp026/ses-20210716/level-04B_run-009",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp026/ses-20210716/level-04B_run-009/sub-cp026_ses-20210716_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-009_dat.csv",
@@ -8365,7 +8365,7 @@
     "run_id": 10,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp026/ses-20210716/level-02B_run-010",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp026/ses-20210716/level-02B_run-010/sub-cp026_ses-20210716_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-010_dat.csv",
@@ -8405,7 +8405,7 @@
     "run_id": 11,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp026/ses-20210716/level-03B_run-011",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp026/ses-20210716/level-03B_run-011/sub-cp026_ses-20210716_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-011_dat.csv",
@@ -8445,7 +8445,7 @@
     "run_id": 12,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp026/ses-20210716/level-01B_run-012",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp026/ses-20210716/level-01B_run-012/sub-cp026_ses-20210716_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-012_dat.csv",
@@ -8485,7 +8485,7 @@
     "run_id": 1,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp027/ses-20210722/level-01B_run-001",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp027/ses-20210722/level-01B_run-001/sub-cp027_ses-20210722_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-001_dat.csv",
@@ -8525,7 +8525,7 @@
     "run_id": 2,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp027/ses-20210722/level-03B_run-002",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp027/ses-20210722/level-03B_run-002/sub-cp027_ses-20210722_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-002_dat.csv",
@@ -8565,7 +8565,7 @@
     "run_id": 3,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp027/ses-20210722/level-02B_run-003",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp027/ses-20210722/level-02B_run-003/sub-cp027_ses-20210722_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-003_dat.csv",
@@ -8605,7 +8605,7 @@
     "run_id": 4,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp027/ses-20210722/level-04B_run-004",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp027/ses-20210722/level-04B_run-004/sub-cp027_ses-20210722_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-004_dat.csv",
@@ -8645,7 +8645,7 @@
     "run_id": 5,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp027/ses-20210722/level-03B_run-005",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp027/ses-20210722/level-03B_run-005/sub-cp027_ses-20210722_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-005_dat.csv",
@@ -8685,7 +8685,7 @@
     "run_id": 6,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp027/ses-20210722/level-04B_run-006",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp027/ses-20210722/level-04B_run-006/sub-cp027_ses-20210722_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-006_dat.csv",
@@ -8725,7 +8725,7 @@
     "run_id": 7,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp027/ses-20210722/level-01B_run-007",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp027/ses-20210722/level-01B_run-007/sub-cp027_ses-20210722_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-007_dat.csv",
@@ -8765,7 +8765,7 @@
     "run_id": 8,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp027/ses-20210722/level-02B_run-008",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp027/ses-20210722/level-02B_run-008/sub-cp027_ses-20210722_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-008_dat.csv",
@@ -8805,7 +8805,7 @@
     "run_id": 9,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp027/ses-20210722/level-04B_run-009",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp027/ses-20210722/level-04B_run-009/sub-cp027_ses-20210722_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-009_dat.csv",
@@ -8845,7 +8845,7 @@
     "run_id": 10,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp027/ses-20210722/level-02B_run-010",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp027/ses-20210722/level-02B_run-010/sub-cp027_ses-20210722_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-010_dat.csv",
@@ -8885,7 +8885,7 @@
     "run_id": 11,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp027/ses-20210722/level-03B_run-011",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp027/ses-20210722/level-03B_run-011/sub-cp027_ses-20210722_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-011_dat.csv",
@@ -8925,7 +8925,7 @@
     "run_id": 12,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp027/ses-20210722/level-01B_run-012",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp027/ses-20210722/level-01B_run-012/sub-cp027_ses-20210722_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-012_dat.csv",
@@ -9405,7 +9405,7 @@
     "run_id": 1,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp029/ses-20220119/level-01B_run-001",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp029/ses-20220119/level-01B_run-001/sub-cp029_ses-20220119_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-001_dat.csv",
@@ -9445,7 +9445,7 @@
     "run_id": 2,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp029/ses-20220119/level-03B_run-002",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp029/ses-20220119/level-03B_run-002/sub-cp029_ses-20220119_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-002_dat.csv",
@@ -9485,7 +9485,7 @@
     "run_id": 3,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp029/ses-20220119/level-02B_run-003",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp029/ses-20220119/level-02B_run-003/sub-cp029_ses-20220119_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-003_dat.csv",
@@ -9525,7 +9525,7 @@
     "run_id": 4,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp029/ses-20220119/level-04B_run-004",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp029/ses-20220119/level-04B_run-004/sub-cp029_ses-20220119_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-004_dat.csv",
@@ -9565,7 +9565,7 @@
     "run_id": 5,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp029/ses-20220119/level-03B_run-005",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp029/ses-20220119/level-03B_run-005/sub-cp029_ses-20220119_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-005_dat.csv",
@@ -9605,7 +9605,7 @@
     "run_id": 6,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp029/ses-20220119/level-04B_run-006",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp029/ses-20220119/level-04B_run-006/sub-cp029_ses-20220119_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-006_dat.csv",
@@ -9645,7 +9645,7 @@
     "run_id": 7,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp029/ses-20220119/level-01B_run-007",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp029/ses-20220119/level-01B_run-007/sub-cp029_ses-20220119_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-007_dat.csv",
@@ -9685,7 +9685,7 @@
     "run_id": 8,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp029/ses-20220119/level-02B_run-008",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp029/ses-20220119/level-02B_run-008/sub-cp029_ses-20220119_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-008_dat.csv",
@@ -9725,7 +9725,7 @@
     "run_id": 9,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp029/ses-20220119/level-04B_run-009",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp029/ses-20220119/level-04B_run-009/sub-cp029_ses-20220119_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-009_dat.csv",
@@ -9765,7 +9765,7 @@
     "run_id": 10,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp029/ses-20220119/level-02B_run-010",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp029/ses-20220119/level-02B_run-010/sub-cp029_ses-20220119_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-010_dat.csv",
@@ -9805,7 +9805,7 @@
     "run_id": 11,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp029/ses-20220119/level-03B_run-011",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp029/ses-20220119/level-03B_run-011/sub-cp029_ses-20220119_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-011_dat.csv",
@@ -9845,7 +9845,7 @@
     "run_id": 12,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp029/ses-20220119/level-01B_run-012",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp029/ses-20220119/level-01B_run-012/sub-cp029_ses-20220119_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-012_dat.csv",
@@ -10325,7 +10325,7 @@
     "run_id": 1,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp031/ses-20211216/level-01B_run-001",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp031/ses-20211216/level-01B_run-001/sub-cp031_ses-20211216_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-001_dat.csv",
@@ -10365,7 +10365,7 @@
     "run_id": 2,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp031/ses-20211216/level-03B_run-002",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp031/ses-20211216/level-03B_run-002/sub-cp031_ses-20211216_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-002_dat.csv",
@@ -10405,7 +10405,7 @@
     "run_id": 3,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp031/ses-20211216/level-02B_run-003",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp031/ses-20211216/level-02B_run-003/sub-cp031_ses-20211216_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-003_dat.csv",
@@ -10445,7 +10445,7 @@
     "run_id": 4,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp031/ses-20211216/level-04B_run-004",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp031/ses-20211216/level-04B_run-004/sub-cp031_ses-20211216_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-004_dat.csv",
@@ -10485,7 +10485,7 @@
     "run_id": 5,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp031/ses-20211216/level-03B_run-005",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp031/ses-20211216/level-03B_run-005/sub-cp031_ses-20211216_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-005_dat.csv",
@@ -10525,7 +10525,7 @@
     "run_id": 6,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp031/ses-20211216/level-04B_run-006",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp031/ses-20211216/level-04B_run-006/sub-cp031_ses-20211216_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-006_dat.csv",
@@ -10565,7 +10565,7 @@
     "run_id": 7,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp031/ses-20211216/level-01B_run-007",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp031/ses-20211216/level-01B_run-007/sub-cp031_ses-20211216_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-007_dat.csv",
@@ -10605,7 +10605,7 @@
     "run_id": 8,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp031/ses-20211216/level-02B_run-008",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp031/ses-20211216/level-02B_run-008/sub-cp031_ses-20211216_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-008_dat.csv",
@@ -10645,7 +10645,7 @@
     "run_id": 9,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp031/ses-20211216/level-04B_run-009",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp031/ses-20211216/level-04B_run-009/sub-cp031_ses-20211216_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-009_dat.csv",
@@ -10685,7 +10685,7 @@
     "run_id": 10,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp031/ses-20211216/level-02B_run-010",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp031/ses-20211216/level-02B_run-010/sub-cp031_ses-20211216_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-010_dat.csv",
@@ -10725,7 +10725,7 @@
     "run_id": 11,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp031/ses-20211216/level-03B_run-011",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp031/ses-20211216/level-03B_run-011/sub-cp031_ses-20211216_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-011_dat.csv",
@@ -10765,7 +10765,7 @@
     "run_id": 12,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp031/ses-20211216/level-02B_run-012",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp031/ses-20211216/level-02B_run-012/sub-cp031_ses-20211216_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-012_dat.csv",
@@ -11285,7 +11285,7 @@
     "run_id": 1,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp033/ses-20211215/level-01B_run-001",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp033/ses-20211215/level-01B_run-001/sub-cp033_ses-20211215_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-001_dat.csv",
@@ -11325,7 +11325,7 @@
     "run_id": 2,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp033/ses-20211215/level-03B_run-002",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp033/ses-20211215/level-03B_run-002/sub-cp033_ses-20211215_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-002_dat.csv",
@@ -11365,7 +11365,7 @@
     "run_id": 3,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp033/ses-20211215/level-02B_run-003",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp033/ses-20211215/level-02B_run-003/sub-cp033_ses-20211215_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-003_dat.csv",
@@ -11405,7 +11405,7 @@
     "run_id": 4,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp033/ses-20211215/level-04B_run-004",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp033/ses-20211215/level-04B_run-004/sub-cp033_ses-20211215_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-004_dat.csv",
@@ -11445,7 +11445,7 @@
     "run_id": 5,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp033/ses-20211215/level-03B_run-005",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp033/ses-20211215/level-03B_run-005/sub-cp033_ses-20211215_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-005_dat.csv",
@@ -11485,7 +11485,7 @@
     "run_id": 6,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp033/ses-20211215/level-04B_run-006",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp033/ses-20211215/level-04B_run-006/sub-cp033_ses-20211215_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-006_dat.csv",
@@ -11525,7 +11525,7 @@
     "run_id": 7,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp033/ses-20211215/level-01B_run-007",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp033/ses-20211215/level-01B_run-007/sub-cp033_ses-20211215_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-007_dat.csv",
@@ -11565,7 +11565,7 @@
     "run_id": 8,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp033/ses-20211215/level-02B_run-008",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp033/ses-20211215/level-02B_run-008/sub-cp033_ses-20211215_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-008_dat.csv",
@@ -11605,7 +11605,7 @@
     "run_id": 9,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp033/ses-20211215/level-04B_run-009",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp033/ses-20211215/level-04B_run-009/sub-cp033_ses-20211215_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-009_dat.csv",
@@ -11645,7 +11645,7 @@
     "run_id": 10,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp033/ses-20211215/level-02B_run-010",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp033/ses-20211215/level-02B_run-010/sub-cp033_ses-20211215_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-010_dat.csv",
@@ -11685,7 +11685,7 @@
     "run_id": 11,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp033/ses-20211215/level-03B_run-011",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp033/ses-20211215/level-03B_run-011/sub-cp033_ses-20211215_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-011_dat.csv",
@@ -11725,7 +11725,7 @@
     "run_id": 12,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp033/ses-20211215/level-01B_run-012",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp033/ses-20211215/level-01B_run-012/sub-cp033_ses-20211215_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-012_dat.csv",
@@ -12725,7 +12725,7 @@
     "run_id": 1,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp037/ses-20210113/level-01B_run-001",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp037/ses-20210113/level-01B_run-001/sub-cp037_ses-20210113_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-001_dat.csv",
@@ -12765,7 +12765,7 @@
     "run_id": 2,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp037/ses-20210113/level-03B_run-002",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp037/ses-20210113/level-03B_run-002/sub-cp037_ses-20210113_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-002_dat.csv",
@@ -12805,7 +12805,7 @@
     "run_id": 3,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp037/ses-20210113/level-02B_run-003",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp037/ses-20210113/level-02B_run-003/sub-cp037_ses-20210113_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-003_dat.csv",
@@ -12845,7 +12845,7 @@
     "run_id": 4,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp037/ses-20210113/level-04B_run-004",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp037/ses-20210113/level-04B_run-004/sub-cp037_ses-20210113_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-004_dat.csv",
@@ -12885,7 +12885,7 @@
     "run_id": 5,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp037/ses-20210113/level-03B_run-005",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp037/ses-20210113/level-03B_run-005/sub-cp037_ses-20210113_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-005_dat.csv",
@@ -12925,7 +12925,7 @@
     "run_id": 6,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp037/ses-20210113/level-04B_run-006",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp037/ses-20210113/level-04B_run-006/sub-cp037_ses-20210113_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-006_dat.csv",
@@ -12965,7 +12965,7 @@
     "run_id": 7,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp037/ses-20210113/level-01B_run-007",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp037/ses-20210113/level-01B_run-007/sub-cp037_ses-20210113_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-007_dat.csv",
@@ -13005,7 +13005,7 @@
     "run_id": 8,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp037/ses-20210113/level-02B_run-008",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp037/ses-20210113/level-02B_run-008/sub-cp037_ses-20210113_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-008_dat.csv",
@@ -13045,7 +13045,7 @@
     "run_id": 9,
     "level": 4,
     "root_folder": "dataPackage/task-ils/sub-cp037/ses-20210113/level-04B_run-009",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp037/ses-20210113/level-04B_run-009/sub-cp037_ses-20210113_task-ils_stream-lslshimmerecg_feat-chunk_level-04B_run-009_dat.csv",
@@ -13085,7 +13085,7 @@
     "run_id": 10,
     "level": 2,
     "root_folder": "dataPackage/task-ils/sub-cp037/ses-20210113/level-02B_run-010",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp037/ses-20210113/level-02B_run-010/sub-cp037_ses-20210113_task-ils_stream-lslshimmerecg_feat-chunk_level-02B_run-010_dat.csv",
@@ -13125,7 +13125,7 @@
     "run_id": 11,
     "level": 3,
     "root_folder": "dataPackage/task-ils/sub-cp037/ses-20210113/level-03B_run-011",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp037/ses-20210113/level-03B_run-011/sub-cp037_ses-20210113_task-ils_stream-lslshimmerecg_feat-chunk_level-03B_run-011_dat.csv",
@@ -13165,7 +13165,7 @@
     "run_id": 12,
     "level": 1,
     "root_folder": "dataPackage/task-ils/sub-cp037/ses-20210113/level-01B_run-012",
-    "is_expert": 1,
+    "is_expert": 0,
     "files": {
       "ecg": {
         "data": "dataPackage/task-ils/sub-cp037/ses-20210113/level-01B_run-012/sub-cp037_ses-20210113_task-ils_stream-lslshimmerecg_feat-chunk_level-01B_run-012_dat.csv",

@@ -20,7 +20,7 @@ echo "Node: $(hostname)"
 module load anaconda/anaconda-2023.09
 
 # Navigate to project directory
-cd ~/ntd/neural_timeseries_diffusion || exit 1
+cd ~/ntd/neural_timeseries_diffusion
 
 # activate Environment
 conda activate ./ntd_env

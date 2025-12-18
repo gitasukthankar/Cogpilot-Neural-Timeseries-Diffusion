@@ -32,10 +32,15 @@ def generate_expert_labels(root_dir: str, output_path: str = 'subject_labels.jso
     
     # Average across difficulty levels
     subject_errors = df.groupby('subject')['cumulative_total_error'].mean()
-    median_error = subject_errors.median()
     
-    # Below median = expert (1), above = novice (0)
-    labels = (subject_errors < median_error).astype(int).to_dict()
+    # Use 25th percentile (lowest 25% errors) as expert cutoff
+    threshold = subject_errors.quantile(0.25)
+    
+    # Subjects with error <= threshold are experts (1), rest are novices (0)
+    labels = (subject_errors <= threshold).astype(int).to_dict()
+    
+    #print(f"25th Percentile Error Score: {threshold:.2f}")
+    #print(f"Experts: {sum(labels.values())}, Novices: {len(labels) - sum(labels.values())}")
     
     #print(f"Median Error: {median_error:.2f}")
     #print(f"Experts: {sum(labels.values())}, Novices: {len(labels) - sum(labels.values())}")

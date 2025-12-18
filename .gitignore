@@ -177,3 +177,5 @@ diagnostic_denormalization.png
 generated_dataset.json
 generatedDataAnalysis.ipynb
 test_generation_output.png
+generated_data_root_oldstats
+evaluate_generated_data.py
