@@ -1,16 +1,9 @@
-# Generating realistic neurophysiological time series with denoising diffusion probabilistic models
+# Generative Models for Expanding Pilot Datasets
 
-![Overview Figure](overview_figure.png)
+This repository is based on the paper ["Generating realistic neurophysiological time series with denoising diffusion probabilistic models"](https://www.cell.com/patterns/fulltext/S2666-3899(24)00189-2), (2024).
 
-Code for the paper ["Generating realistic neurophysiological time series with denoising diffusion probabilistic models"](https://www.cell.com/patterns/fulltext/S2666-3899(24)00189-2), (2024).
-
-The repository contains all the scripts to run the experiments presented in the paper.  
-To run the experiments, first download the datasets (links in the paper) and change the `filepath` parameter in the dataset configuration files in `conf/dataset`. To save all outputs locally, set the `save_path` parameter in `conf/base` to the desired location.
-
-Experiment tracking and saving with [Weights & Biases](https://wandb.ai/site) is also supported, but disabled by default.  
-Finally, use the shell scripts provided in `scripts` to run the experiments! 
-
-Additionally, an example Jupyter notebook `example_ner_notebook.ipynb`, where a diffusion model is trained to generate the BCI Challenge @ NER 2015 data, is provided together with the data.
+The code was modified to be able to run correctly on the CogPilot dataset
+https://sites.mit.edu/pilotperformance/
 
 ## Installation
 Install dependencies via pip:
