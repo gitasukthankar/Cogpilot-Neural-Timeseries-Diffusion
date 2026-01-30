@@ -2,7 +2,7 @@
 
 This repository is based on the paper ["Generating realistic neurophysiological time series with denoising diffusion probabilistic models"](https://www.cell.com/patterns/fulltext/S2666-3899(24)00189-2), (2024).
 
-The code was modified to be able to run correctly on the CogPilot dataset
+The code was modified by Daisy Trejo-Hernandex to run on the CogPilot dataset
 https://sites.mit.edu/pilotperformance/
 
 ## Installation
